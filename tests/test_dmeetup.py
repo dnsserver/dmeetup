@@ -55,7 +55,6 @@ def logout(client):
 def test_bad_register(client):
     rv = client.post('/auth/register', data=json.dumps(dict(
         email='denis1@denib.com',
-        password='123',
         )), content_type='application/json')
     resp = json.loads(rv.data.decode())
     assert resp['status'] == "fail"
@@ -66,7 +65,6 @@ def test_register(client):
     rv = client.post('/auth/register', data=json.dumps(dict(
         email='denis1@denib.com',
         password='123',
-        full_name='test user'
         )), content_type='application/json')
     resp = json.loads(rv.data.decode())
     assert resp['status'] == "success"
