@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Map extends React.Component {
+export class Map extends React.Component {
     loadMap() {
         // google is available
         const maps = google.maps;
@@ -39,24 +39,12 @@ class Map extends React.Component {
 
     render(){
         const style = {
-            width: '100vw',
-            height: '100vh',
+            width: '90vw',
+            height: '70vh',
         };
         return (
+            <div>
             <div ref='map' style={style}>Loading map...</div>
-        );
-    }
-}
-
-export class Container extends React.Component {
-    render(){
-        const style = {
-            width: '100vw',
-            height: '100vh',
-        };
-        return (
-            <div style={style}>
-                <Map />
             </div>
         );
     }

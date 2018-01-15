@@ -2,6 +2,13 @@ import React from 'react';
 
 
 export class Navigation extends React.Component {
+    constructor(props){
+        super(props);
+    }
+
+    doAction(cmd){
+        this.props.action(cmd);
+    }
 
     render(){
         return (
@@ -19,8 +26,9 @@ export class Navigation extends React.Component {
 
                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul className="nav navbar-nav">
-                    <li><a href="#" onClick={this.props.map}>Map</a></li>
-                    <li><a href="#" onClick={this.props.logout}>Logout</a></li>
+                    <li><a href="#" onClick={this.doAction.bind(this, "map")}>Map</a></li>
+                    <li><a href="#" onClick={this.doAction.bind(this, "profile")}>Profile</a></li>
+                    <li><a href="#" onClick={this.doAction.bind(this, "logout")}>Logout</a></li>
                   </ul>
                 </div>
               </div>

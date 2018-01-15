@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import {Alerts} from './alerts';
-import {Container} from './map';
+import {Map} from './map';
 import {Login} from './login';
 import {Profile} from './profile';
 import {Navigation} from './navigation';
@@ -13,15 +13,16 @@ class App extends React.Component {
         this.state = {
             isLogin: false,
             auth_token: null,
-            message: null
+            message: null,
+            page: null
         };
         this.onSuccessLogin = this.onSuccessLogin.bind(this);
         this.onFailedLogin = this.onFailedLogin.bind(this);
-        this.onLogout = this.onLogout.bind(this);
-        this.onMap = this.onMap.bind(this);
+        this.logout = this.logout.bind(this);
+        this.navigation = this.navigation.bind(this);
     }
 
-    onLogout(){
+    logout(){
         $.ajax({
             url: '/auth/logout',
             dataType: "json",
@@ -47,8 +48,17 @@ class App extends React.Component {
         });
     }
 
-    onMap(){
-
+    navigation(cmd){
+        switch(cmd){
+            case "logout":
+                this.logout();
+                break;
+            default:
+                this.setState({
+                    message: null,
+                    page: cmd
+                });
+        }
     }
 
     onSuccessLogin(u){
@@ -71,8 +81,17 @@ class App extends React.Component {
         let navigation = null;
         let body = null;
         if(this.state.isLogin){
-            navigation = <Navigation logout={this.onLogout} map={this.onMap} />;
-            body = <Profile auth_token={this.state.auth_token}/>;
+            navigation = <Navigation action={this.navigation} />;
+            switch(this.state.page){
+                case "map":
+                    body = <Map />;
+                    break;
+                case "profile":
+                    body = <Profile auth_token={this.state.auth_token}/>;
+                    break;
+                default:
+                    body = <div>Home page</div>;
+            }
         }else{
             body = <Login onSuccessLogin={this.onSuccessLogin} onFailedLogin={this.onFailedLogin} />;
         }
