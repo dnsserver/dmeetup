@@ -119,6 +119,8 @@ class Location(db.Model):
     zipcode = db.Column(db.String(10))
     lat = db.Column(db.String(100))
     lon = db.Column(db.String(100))
+    submitted_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    approved = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return self.name
@@ -133,4 +135,6 @@ admin = admin.Admin()
 admin.add_view(sqla.ModelView(User, db.session))
 admin.add_view(sqla.ModelView(Role, db.session))
 admin.add_view(PetView(Pet, db.session))
+admin.add_view(sqla.ModelView(Location, db.session))
+
 
