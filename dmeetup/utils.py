@@ -1,8 +1,10 @@
+from functools import wraps
 from flask import request, jsonify, g
 from .database import User
 
 def require_authentication(func):
-    def func_wrapper():
+    @wraps(func)
+    def func_wrapper(*args, **kwargs):
         auth_header = request.headers.get('Authorization')
         auth_token = None
         if auth_header:
@@ -14,7 +16,7 @@ def require_authentication(func):
             if not isinstance(resp, str):
                 user = User.query.filter_by(id=resp).first()
                 g.user = user
-                return func()
+                return func(*args, **kwargs)
             respObject = {
                     'status': 'fail',
                     'message': resp

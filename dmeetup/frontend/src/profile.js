@@ -1,7 +1,5 @@
 import React from 'react';
 
-import $ from 'jquery';
-
 export class Profile extends React.Component {
     constructor(props){
         super(props);
