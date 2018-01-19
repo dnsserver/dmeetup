@@ -1,11 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 
-
-export class Navigation extends React.Component {
-    constructor(props){
-        super(props);
-    }
-
+class Nav extends Component {
     doAction(cmd){
         this.props.action(cmd);
     }
@@ -21,14 +17,14 @@ export class Navigation extends React.Component {
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                   </button>
-                  <a className="navbar-brand" href="/">DMeetup</a>
+                  <Link className="navbar-brand" to="/">DMeetup</Link>
                 </div>
 
                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul className="nav navbar-nav">
-                    <li><a href="#" onClick={this.doAction.bind(this, "map")}>Map</a></li>
-                    <li><a href="#" onClick={this.doAction.bind(this, "profile")}>Profile</a></li>
-                    <li><a href="#" onClick={this.doAction.bind(this, "logout")}>Logout</a></li>
+                    <li><Link to="/map">Map</Link></li>
+                    <li><Link to="/profile">Profile</Link></li>
+                    <li><Link onClick={this.props.logout} to="/">Logout</Link></li>
                   </ul>
                 </div>
               </div>
@@ -36,3 +32,5 @@ export class Navigation extends React.Component {
         );
     }
 }
+
+export default Nav;

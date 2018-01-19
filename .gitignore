@@ -2,6 +2,7 @@
 lib/
 include/
 bin/
+share/
 __pycache__
 node_modules
 .eggs
@@ -11,3 +12,5 @@ node_modules
 
 **/*.db
 **/*.pyc
+
+

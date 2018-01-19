@@ -33,7 +33,7 @@ class BlacklistToken(db.Model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(200), unique=True, nullable=False)
-    password = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(500), nullable=False)
     full_name = db.Column(db.String(200), nullable=True)
     pets = db.relationship('Pet', backref='user', lazy=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=True)
@@ -111,20 +111,49 @@ class Pet(db.Model):
         return self.name
 
 
-class Location(db.Model):
+class Feed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), unique=True, nullable=False)
-    street = db.Column(db.String(200))
-    city = db.Column(db.String(100))
-    state = db.Column(db.String(2))
-    zipcode = db.Column(db.String(10))
+    feed_type = db.Column(db.String(50), nullable=False)
+    feed_content = db.Column(db.Text, nullable=False)
     lat = db.Column(db.String(100))
     lon = db.Column(db.String(100))
     submitted_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
-    approved = db.Column(db.Boolean, default=False)
+    submitted_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
 
     def __repr__(self):
         return self.name
+
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    sent_time = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    read = db.Column(db.Boolean, default=False)
+
+    def __init__(self, sender, receiver, message):
+        self.sender = sender
+        self.receiver = receiver
+        self.message = message
+        self.send_time = datetime.datetime.utcnow()
+        self.read = False
+
+
+class ConnectionRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    sender_message = db.Column(db.String(200), nullable=True)
+    request_status = db.Column(db.String(50), nullable=True)
+    sent_time = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+
+    def __init__(self, sender, receiver, message):
+        self.sender = sender
+        self.receiver = receiver
+        self.sender_message = message
+        self.request_status = "init"
+        self.sent_time = datetime.datetime.utcnow()
 
 
 # Customized Admin views
@@ -132,10 +161,17 @@ class PetView(sqla.ModelView):
     inline_models = (Attribute,)
 
 
+class UserView(sqla.ModelView):
+    column_exclude_list = ['password',]
+    column_editable_list = ['email','full_name', 'pets','role_id']
+    form_excluded_columns = ['password',]
+
+
 admin = admin.Admin()
-admin.add_view(sqla.ModelView(User, db.session))
+admin.add_view(UserView(User, db.session))
 admin.add_view(sqla.ModelView(Role, db.session))
 admin.add_view(PetView(Pet, db.session))
-admin.add_view(sqla.ModelView(Location, db.session))
-
+admin.add_view(sqla.ModelView(Feed, db.session))
+admin.add_view(sqla.ModelView(Message, db.session))
+admin.add_view(sqla.ModelView(ConnectionRequest, db.session))
 

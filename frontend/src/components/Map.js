@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-export class Map extends React.Component {
+import script from 'scriptjs';
+
+export default class Map extends Component {
     loadMap() {
+        script('https://maps.googleapis.com/maps/api/js?key=AIzaSyCAZlHfI22LHKSX_Cczw4jAtFLYsXeZmok',()=>{
+        const google=window.google;
         // google is available
         const maps = google.maps;
 
@@ -23,14 +27,16 @@ export class Map extends React.Component {
                     lng: pos.coords.longitude
                 };
                 this.map.setCenter(position);
-                var marker = new maps.Marker({
+                new maps.Marker({
                     position: position,
                     map: this.map
                 });
+
             }, function(e){
                 console.log(e);
             });
         }
+        });
     }
 
     componentDidMount(){
@@ -49,4 +55,3 @@ export class Map extends React.Component {
         );
     }
 }
-

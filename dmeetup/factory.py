@@ -3,6 +3,7 @@ import click
 from flask import Flask, render_template, session, g, request, abort, _app_ctx_stack as stack, jsonify
 from flask_nav import Nav
 from flask_nav.elements import Navbar, View
+from flask_cors import CORS
 
 from werkzeug.utils import find_modules, import_string
 
@@ -22,6 +23,7 @@ def create_app(config=None):
     app.config.update(config or {})
     app.config.from_envvar('DMEETUP_SETTINGS', silent=True)
 
+    CORS(app)
     register_teardowns(app)
     load_db(app)
     admin.init_app(app)

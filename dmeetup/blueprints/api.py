@@ -1,6 +1,6 @@
 from flask import jsonify, Blueprint, g, request
 
-from ..database import User, Location, db
+from ..database import User, Feed, db
 from ..utils import require_authentication
 
 bp = Blueprint('api', __name__)
@@ -26,28 +26,26 @@ def userinfo():
     return jsonify(respObject)
 
 
-@bp.route('/location', methods=['POST'])
+@bp.route('/feed', methods=['POST'])
 @require_authentication
 def post_location():
     data = request.get_json()
     respObj = {'status':'fail'}
-    if "name" not in data:
-        respObj['message']='Please provide a name.'
-        return jsonify(respObj), 400
-    if "lat" not in data or 'lng' not in data:
-        respObj['message'] = 'Please provide lat/lng.'
+    if "content" not in data:
+        respObj['message'] = 'Please provide content.'
         return jsonify(respObj), 400
 
-    location = Location(
-            name=data.get('name'),
+    feed = Feed(
+            feed_type=data.get('feed_type'),
+            feed_content=data.get('feed_content'),
             lat=data.get('lat'),
             lon=data.get('lng'),
             submitted_by=g.user.id
             )
-    db.session.add(location)
+    db.session.add(feed)
     db.session.commit()
     respObj['status'] = 'success'
-    respObj['message'] = 'Location with id:{} was created'.format(location.id)
+    respObj['message'] = 'Feed with id:{} was created'.format(feed.id)
     return jsonify(respObj), 200
 
 

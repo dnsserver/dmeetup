@@ -13,6 +13,7 @@ setup(
         'flask_admin',
         'flask_oidc',
         'flask_nav',
+        'flask-cors',
         'pyopenssl',
         'pyjwt',
         'bcrypt',

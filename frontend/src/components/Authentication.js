@@ -1,6 +1,8 @@
-import React from 'react';
+import React , {Component} from 'react';
 
-export class Login extends React.Component {
+import { doLogin, doRegister } from '../utils/dmeetup-api';
+
+export default class Authentication extends Component {
     constructor(props){
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -9,6 +11,25 @@ export class Login extends React.Component {
     }
 
     register(){
+        let that = this;
+        doRegister(this.email.value, this.password.value).then((data) => {
+            if(data['status'] === 'success'){
+                if(that.props.onSuccessLogin){
+                    that.props.onSuccessLogin(data['auth_token']);
+                }
+            }else{
+                if(that.props.onFailedLogin){
+                    that.props.onFailedLogin(data['message']);
+                }
+            }
+        }).catch((error)=> {
+            if(that.props.onFailedLogin){
+                that.props.onFailedLogin(error.message);
+            }
+        });
+
+
+        /*
         $.ajax({
             url:'/auth/register',
             data: JSON.stringify({
@@ -19,7 +40,6 @@ export class Login extends React.Component {
             method: "POST",
             headers:{"Content-Type":"application/json"},
             success: (data)=>{
-                console.log(data);
                 if(data['status'] === "success"){
                     if(this.props.onSuccessLogin){
                         this.props.onSuccessLogin(data['auth_token']);
@@ -36,10 +56,24 @@ export class Login extends React.Component {
                 }
             }
         });
+        */
     }
 
     handleSubmit(e){
         e.preventDefault();
+        doLogin(this.email.value, this.password.value).then((data) => {
+            if(data['status'] === 'success'){
+                if(this.props.onSuccessLogin){
+                    this.props.onSuccessLogin(data['auth_token']);
+                }
+            }else{
+                if(this.props.onFailedLogin){
+                    this.props.onFailedLogin(data['message']);
+                }
+            }
+        });
+
+        /*
         $.ajax({
             url: '/auth/login',
             data: JSON.stringify({
@@ -69,10 +103,16 @@ export class Login extends React.Component {
                 }
             }
         });
+        */
     }
 
     render(){
         return (
+            <div>
+            <br/>
+            <div>
+            Please Login:
+            </div>
             <form onSubmit={this.handleSubmit}>
                 <div className="form-group">
                     <label htmlFor="email">Email</label>
@@ -90,6 +130,7 @@ export class Login extends React.Component {
                 &nbsp; or &nbsp;
                 <button type="button" onClick={this.register} className="btn pull-right">Sign up</button>
             </form>
+            </div>
         );
     }
 }
