@@ -41,6 +41,14 @@ class User(db.Model):
     def __repr__(self):
         return self.email
 
+    def json_obj(self):
+        return {
+                'id': self.id,
+                'email': self.email,
+                'full_name': self.full_name,
+                'role_id': self.role_id
+                }
+
     def encode_auth_token(self, user_id):
         """
         Generates the Auth Token
@@ -123,6 +131,17 @@ class Feed(db.Model):
     def __repr__(self):
         return self.name
 
+    def json_obj(self):
+        return {
+                'id': self.id,
+                'feed_type': self.feed_type,
+                'feed_content': self.feed_content,
+                'lat': self.lat,
+                'lon': self.lon,
+                'submitted_by': self.submitted_by,
+                'submitted_at': self.submitted_at
+                }
+
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -139,6 +158,16 @@ class Message(db.Model):
         self.send_time = datetime.datetime.utcnow()
         self.read = False
 
+    def json_obj(self):
+        return {
+                'id': self.id,
+                'sender': self.sender,
+                'receiver': self.receiver,
+                'message': self.message,
+                'sent_time': self.sent_time,
+                'read': self.read
+                }
+
 
 class ConnectionRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -154,6 +183,16 @@ class ConnectionRequest(db.Model):
         self.sender_message = message
         self.request_status = "init"
         self.sent_time = datetime.datetime.utcnow()
+
+    def json_obj(self):
+        return {
+                'id':self.id,
+                'sender':self.sender,
+                'receiver':self.receiver,
+                'sender_message':self.sender_message,
+                'request_status':self.request_status,
+                'sent_time':self.sent_time
+                }
 
 
 # Customized Admin views

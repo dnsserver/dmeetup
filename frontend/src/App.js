@@ -11,6 +11,8 @@ import Profile from './components/Profile';
 import Authentication from './components/Authentication';
 import Feed from './components/Feed';
 import Map from './components/Map';
+import User from './components/User';
+
 
 class App extends Component {
     constructor(props){
@@ -60,8 +62,9 @@ class App extends Component {
                         <div>
                         <Route render={props => <Nav logout={this.logout} />} />
                         <Switch>
-                            <Route exact path="/" component={Feed}/>
+                            <Route exact path="/" render={props => <Feed auth_token={this.state.auth_token}/>} />
                             <Route path="/profile" render={props => <Profile auth_token={this.state.auth_token}/>} />
+                            <Route path="/user" render={props => <User auth_token={this.state.auth_token}/>} />
                             <Route path="/map" render={props => (
                                 <div>
                                 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAZlHfI22LHKSX_Cczw4jAtFLYsXeZmok" type="text/javascript"></script>

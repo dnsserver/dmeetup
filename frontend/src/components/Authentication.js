@@ -27,36 +27,6 @@ export default class Authentication extends Component {
                 that.props.onFailedLogin(error.message);
             }
         });
-
-
-        /*
-        $.ajax({
-            url:'/auth/register',
-            data: JSON.stringify({
-                "email":this.email.value,
-                "password":this.password.value
-            }),
-            dataType: "json",
-            method: "POST",
-            headers:{"Content-Type":"application/json"},
-            success: (data)=>{
-                if(data['status'] === "success"){
-                    if(this.props.onSuccessLogin){
-                        this.props.onSuccessLogin(data['auth_token']);
-                    }
-                }else{
-                    if(this.props.onFailedLogin){
-                        this.props.onFailedLogin(data['message']);
-                    }
-                }
-            },
-            error: (err)=>{
-                if(this.props.onFailedLogin){
-                    this.props.onFailedLogin(err);
-                }
-            }
-        });
-        */
     }
 
     handleSubmit(e){
@@ -72,38 +42,6 @@ export default class Authentication extends Component {
                 }
             }
         });
-
-        /*
-        $.ajax({
-            url: '/auth/login',
-            data: JSON.stringify({
-                "email":this.email.value,
-                "password":this.password.value
-            }),
-            dataType: "json",
-            method: 'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            success: (data)=>{
-                if(data['status'] === "success"){
-                    if(this.props.onSuccessLogin){
-                        this.props.onSuccessLogin(data['auth_token']);
-                    }
-                }else{
-                    if(this.props.onFailedLogin){
-                        this.props.onFailedLogin(data['message']);
-                    }
-                }
-
-            },
-            error: (err)=>{
-                if(this.props.onFailedLogin){
-                    this.props.onFailedLogin(err['responseJSON'].message);
-                }
-            }
-        });
-        */
     }
 
     render(){

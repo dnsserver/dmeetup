@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
-class Nav extends Component {
+export default class Nav extends Component {
     doAction(cmd){
         this.props.action(cmd);
     }
@@ -24,6 +24,7 @@ class Nav extends Component {
                   <ul className="nav navbar-nav">
                     <li><Link to="/map">Map</Link></li>
                     <li><Link to="/profile">Profile</Link></li>
+                    <li><Link to="/user">Users</Link></li>
                     <li><Link onClick={this.props.logout} to="/">Logout</Link></li>
                   </ul>
                 </div>
@@ -33,4 +34,3 @@ class Nav extends Component {
     }
 }
 
-export default Nav;
